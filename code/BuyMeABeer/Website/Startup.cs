@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Website.Database;
 
 namespace Website
 {
@@ -19,6 +21,8 @@ namespace Website
         {
             services.AddApplicationInsightsTelemetry();
             services.AddControllersWithViews();
+            services.AddDbContext<WebsiteDbContext>(options =>
+                options.UseNpgsql(Configuration["Data:DbContext:ConnectionString"]));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -32,6 +36,12 @@ namespace Website
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+            }
+
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<WebsiteDbContext>();
+                context.Database.Migrate();
             }
 
             app.UseHttpsRedirection();

@@ -1,0 +1,8 @@
+version: "3"
+services:
+  website-db:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=12345678
+    ports:
+      - 5432:5432

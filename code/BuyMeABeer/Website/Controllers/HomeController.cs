@@ -4,7 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Website.Database;
 using Website.Models;
 
 namespace Website.Controllers
@@ -12,15 +14,18 @@ namespace Website.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly WebsiteDbContext _db;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, WebsiteDbContext db)
         {
             _logger = logger;
+            _db = db;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var testEntityCount = await _db.TestEntities.CountAsync();
+            return View(new IndexViewModel { TestEntityCount = testEntityCount });
         }
 
         public IActionResult Privacy()
