@@ -1,8 +1,10 @@
 version: "3"
 services:
-  website-db:
-    image: postgres
-    environment:
-      - POSTGRES_PASSWORD=12345678
+  mssql:
+    image: mcr.microsoft.com/mssql/server
+    container_name: website-mssql
     ports:
-      - 5432:5432
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=<YourStrong@Passw0rd>

@@ -52,3 +52,12 @@ TODO: good question...
 ## Local development and deployment
 
 TODO: write out how to develop and deploy this
+
+## TODO
+
+* Provision a database on Azure using Pulumi and make sure the website connects to it (check out https://github.com/pulumi/examples/blob/master/azure-cs-msi-keyvault-rbac/AppStack.cs in case we want to use AD auth instead of connection strings)
+* Add authentication to the website using Auth0 or another provider (check whether it is possible to provision it using Pulumi)
+* Cleanup the website backend (e.g. use EF Core and auth best practices)
+* Cleanup the website frontend (e.g. use MVC best practices, use npm for frontend dependencies)
+* Create the pages we actually want to have
+* Integrate with a payments provider

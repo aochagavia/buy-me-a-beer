@@ -22,7 +22,7 @@ namespace Website
             services.AddApplicationInsightsTelemetry();
             services.AddControllersWithViews();
             services.AddDbContext<WebsiteDbContext>(options =>
-                options.UseNpgsql(Configuration["Data:DbContext:ConnectionString"]));
+                options.UseSqlServer(Configuration["Data:DbContext:ConnectionString"]));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
