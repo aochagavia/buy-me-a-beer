@@ -51,13 +51,26 @@ TODO: good question...
 
 ## Local development and deployment
 
-TODO: write out how to develop and deploy this
+TODO: explain our usage of docker-compose
+
+TODO: explain how to set up Auth0 with dotnet secret
+
+## Authentication
+
+Following this tutorial to set up Auth0: https://auth0.com/docs/quickstart/webapp/aspnet-core-3
 
 ## TODO
 
-* Provision a database on Azure using Pulumi and make sure the website connects to it (check out https://github.com/pulumi/examples/blob/master/azure-cs-msi-keyvault-rbac/AppStack.cs in case we want to use AD auth instead of connection strings)
-* Add authentication to the website using Auth0 or another provider (check whether it is possible to provision it using Pulumi)
+Must do:
+
+* Figure out how to add the auth0 domain automatically to the app service settings (ideally we would read it from the Pulumi config)
 * Cleanup the website backend (e.g. use EF Core and auth best practices)
 * Cleanup the website frontend (e.g. use MVC best practices, use npm for frontend dependencies)
 * Create the pages we actually want to have
 * Integrate with a payments provider
+
+Could do:
+
+* Start using `azure-nextgen` Pulumi resource provider instead of `azure` (needs https://github.com/pulumi/pulumi-azure-nextgen/issues/54 to be solved)
+* Figure out how to enable "managed identities for azure resources" so our app service can talk to the database without having credentials in the connection string
+* Provison Auth0 using Pulumi

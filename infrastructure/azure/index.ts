@@ -1,6 +1,7 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as random from "@pulumi/random";
 import * as azure from "@pulumi/azure";
+import * as auth0 from "@pulumi/auth0";
 
 const prefix = "buy-me-a-beer";
 
@@ -28,7 +29,7 @@ export = async () => {
         ],
     });
 
-    const secret = new azure.keyvault.Secret('ApplicationInsights--InstrumentationKey', {
+    const aiSecret = new azure.keyvault.Secret('ApplicationInsights--InstrumentationKey', {
         keyVaultId: vault.id,
         value: appInsights.instrumentationKey,
         name: 'ApplicationInsights--InstrumentationKey',
@@ -79,6 +80,7 @@ export = async () => {
         },
         appSettings: {
             'KeyVaultName': vault.name,
+            // 'Auth0:Domain': config.require('auth0:domain'), // TODO
         },
     });
 
@@ -101,4 +103,32 @@ export = async () => {
                 serverName: sqlServer.name,
             }),
         ));
+
+    const auth0Client = new auth0.Client('BuyMeABeer', {
+        name: 'BuyMeABeer',
+        appType: 'regular_web',
+        allowedLogoutUrls: [
+            'http://localhost:3000',
+            appService.defaultSiteHostname.apply(hostName => `https://${hostName}`),
+        ],
+        callbacks: [
+            'http://localhost:3000/callback',
+            appService.defaultSiteHostname.apply(hostName => `https://${hostName}/callback`),
+        ],
+        jwtConfiguration: {
+            alg: 'RS256',
+        },
+    });
+
+    const auth0ClientId = new azure.keyvault.Secret('Auth0--ClientId', {
+        keyVaultId: vault.id,
+        value: auth0Client.clientId,
+        name: 'Auth0--ClientId',
+    });
+
+    const auth0ClientSecret = new azure.keyvault.Secret('Auth0--ClientSecret', {
+        keyVaultId: vault.id,
+        value: auth0Client.clientSecret,
+        name: 'Auth0--ClientSecret',
+    });
 }
