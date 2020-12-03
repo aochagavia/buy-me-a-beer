@@ -1,4 +1,5 @@
 import * as pulumi from "@pulumi/pulumi";
+import * as random from "@pulumi/random";
 import * as azure from "@pulumi/azure";
 
 const prefix = "buy-me-a-beer";
@@ -30,7 +31,33 @@ export = async () => {
     const secret = new azure.keyvault.Secret('ApplicationInsights--InstrumentationKey', {
         keyVaultId: vault.id,
         value: appInsights.instrumentationKey,
-        name: 'ApplicationInsights--InstrumentationKey', // Needed to prevent pulumi from appending a random string
+        name: 'ApplicationInsights--InstrumentationKey',
+    });
+
+    const administratorLoginUsername = new random.RandomPassword("sqlAdminUsername", { length: 32, special: true }).result;
+    const administratorLoginPassword = new random.RandomPassword("sqlAdminPassword", { length: 32, special: true }).result;
+    const sqlServer = new azure.sql.SqlServer(`${prefix}-sql`, {
+        resourceGroupName: resourceGroup.name,
+        administratorLogin: administratorLoginUsername,
+        administratorLoginPassword: administratorLoginPassword,
+        version: "12.0",
+    });
+
+    const database = new azure.sql.Database(`${prefix}-db`, {
+        resourceGroupName: resourceGroup.name,
+        serverName: sqlServer.name,
+        requestedServiceObjectiveName: "S0",
+    });
+
+    const dbConnectionString = pulumi
+        .all([sqlServer.name, database.name, administratorLoginUsername, administratorLoginPassword])
+        .apply(([server, db, username, password]) =>
+            `Server=tcp:${server}.database.windows.net;Database=${db};User ID=${username};Password=${password};`);
+
+    const sqlConnectionString = new azure.keyvault.Secret('Data--DbContext--ConnectionString', {
+        keyVaultId: vault.id,
+        value: dbConnectionString,
+        name: 'Data--DbContext--ConnectionString',
     });
 
     const appServicePlan = new azure.appservice.Plan(`${prefix}-plan`, {
@@ -50,13 +77,11 @@ export = async () => {
         identity: {
             type: 'SystemAssigned',
         },
-        // TODO: uncommenting the code below leads stuff to fail. For now we have to manually configure the key vault name.
-        // appSettings: {
-        //     'KeyVaultName': vault.name,
-        // },
+        appSettings: {
+            'KeyVaultName': vault.name,
+        },
     });
 
-    // Taken from: https://github.com/pulumi/examples/blob/21a0f83c2b630610ba8bc36bc2002fe8079e5538/azure-ts-msi-keyvault-rbac/index.ts
     // Work around a preview issue https://github.com/pulumi/pulumi-azure/issues/192
     const principalId = appService.identity.apply(id => id.principalId || "11111111-1111-1111-1111-111111111111");
     const appServicePolicy = new azure.keyvault.AccessPolicy(`${prefix}-access-policy`, {
@@ -65,4 +90,15 @@ export = async () => {
         objectId: principalId,
         secretPermissions: ['get', 'list'],
     });
+
+    // Add SQL firewall exceptions
+    const firewallRules = appService.outboundIpAddresses.apply(
+        ips => ips.split(",").map(
+            ip => new azure.sql.FirewallRule(`FR${ip}`, {
+                resourceGroupName: resourceGroup.name,
+                startIpAddress: ip,
+                endIpAddress: ip,
+                serverName: sqlServer.name,
+            }),
+        ));
 }
