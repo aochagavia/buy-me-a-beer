@@ -63,7 +63,6 @@ Following this tutorial to set up Auth0: https://auth0.com/docs/quickstart/webap
 
 Must do:
 
-* Figure out how to add the auth0 domain automatically to the app service settings (ideally we would read it from the Pulumi config)
 * Cleanup the website backend (e.g. use EF Core and auth best practices)
 * Cleanup the website frontend (e.g. use MVC best practices, use npm for frontend dependencies)
 * Create the pages we actually want to have
@@ -73,4 +72,3 @@ Could do:
 
 * Start using `azure-nextgen` Pulumi resource provider instead of `azure` (needs https://github.com/pulumi/pulumi-azure-nextgen/issues/54 to be solved)
 * Figure out how to enable "managed identities for azure resources" so our app service can talk to the database without having credentials in the connection string
-* Provison Auth0 using Pulumi

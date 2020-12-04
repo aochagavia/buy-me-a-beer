@@ -80,7 +80,7 @@ export = async () => {
         },
         appSettings: {
             'KeyVaultName': vault.name,
-            // 'Auth0:Domain': config.require('auth0:domain'), // TODO
+            'Auth0:Domain': new pulumi.Config('auth0').require('domain'),
         },
     });
 
@@ -94,6 +94,7 @@ export = async () => {
     });
 
     // Add SQL firewall exceptions
+    // TODO: are these rules necessary? I am almost sure the appservice will have access regardless of these rules
     const firewallRules = appService.outboundIpAddresses.apply(
         ips => ips.split(",").map(
             ip => new azure.sql.FirewallRule(`FR${ip}`, {
