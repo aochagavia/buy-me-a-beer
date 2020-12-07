@@ -59,6 +59,10 @@ TODO: explain how to set up Auth0 with dotnet secret
 
 Following this tutorial to set up Auth0: https://auth0.com/docs/quickstart/webapp/aspnet-core-3
 
+## Client-side library management
+
+Following this tutorial to set up Webpack: https://medium.com/@lars.willemsens/managing-asp-net-core-mvc-front-end-dependencies-with-npm-and-webpack-part-1-1f6a8b8a1289
+
 ## TODO
 
 Must do:

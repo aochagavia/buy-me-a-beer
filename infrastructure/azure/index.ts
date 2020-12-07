@@ -121,6 +121,7 @@ export = async () => {
     });
 
     // TODO: figure out how to turn off the login via Google for the newly created client, which is turned on by default
+    // Check out this: https://www.pulumi.com/docs/reference/pkg/auth0/connection/
     // const auth0GoogleConnection = new auth0.Connection('Google', {
 
     // });

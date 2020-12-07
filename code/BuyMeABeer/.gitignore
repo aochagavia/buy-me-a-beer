@@ -5,6 +5,9 @@ project.lock.json
 *.pyc
 nupkg/
 
+# Client-side stuff
+wwwroot/dist/
+
 # Visual Studio Code
 .vscode
 

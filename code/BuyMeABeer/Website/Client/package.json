@@ -1,0 +1,19 @@
+{
+    "name": "BuyMeABeerFrontend",
+    "description": "Front-end dependencies for BuyMeABeer.",
+    "repository": "https://github.com/aochagavia/buy-me-a-beer",
+    "license": "MIT",
+    "version": "0.1.0",
+    "dependencies": {},
+    "devDependencies": {
+        "webpack": "^5.0.0",
+        "webpack-cli": "^4.0.0",
+        "css-loader": "^5.0.1",
+        "style-loader": "^2.0.0",
+        "file-loader": "^6.0.0",
+        "url-loader": "^4.0.0"
+    },
+    "scripts": {
+        "build": "webpack"
+    }
+}
