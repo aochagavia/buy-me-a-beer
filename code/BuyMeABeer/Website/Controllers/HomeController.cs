@@ -9,7 +9,7 @@ using Website.Models;
 
 namespace Website.Controllers
 {
-    [Authorize] // TODO: remove this Authorize, since this was just for testing
+    // [Authorize] // TODO: remove this Authorize, since this was just for testing
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
