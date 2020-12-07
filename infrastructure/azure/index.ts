@@ -94,7 +94,6 @@ export = async () => {
     });
 
     // Add SQL firewall exceptions
-    // TODO: are these rules necessary? I am almost sure the appservice will have access regardless of these rules
     const firewallRules = appService.outboundIpAddresses.apply(
         ips => ips.split(",").map(
             ip => new azure.sql.FirewallRule(`FR${ip}`, {
@@ -120,6 +119,11 @@ export = async () => {
             alg: 'RS256',
         },
     });
+
+    // TODO: figure out how to turn off the login via Google for the newly created client, which is turned on by default
+    // const auth0GoogleConnection = new auth0.Connection('Google', {
+
+    // });
 
     const auth0ClientId = new azure.keyvault.Secret('Auth0--ClientId', {
         keyVaultId: vault.id,

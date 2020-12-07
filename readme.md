@@ -63,6 +63,7 @@ Following this tutorial to set up Auth0: https://auth0.com/docs/quickstart/webap
 
 Must do:
 
+* Use policies in authentication for additional security (i.e. if someone manages to register they will still be missing a claim to do anything)
 * Cleanup the website backend (e.g. use EF Core and auth best practices)
 * Cleanup the website frontend (e.g. use MVC best practices, use npm for frontend dependencies)
 * Create the pages we actually want to have
