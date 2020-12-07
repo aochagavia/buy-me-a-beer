@@ -61,7 +61,9 @@ Following this tutorial to set up Auth0: https://auth0.com/docs/quickstart/webap
 
 ## Client-side library management
 
-Following this tutorial to set up Webpack: https://medium.com/@lars.willemsens/managing-asp-net-core-mvc-front-end-dependencies-with-npm-and-webpack-part-1-1f6a8b8a1289
+Following this tutorial to set up Webpack:
+* https://medium.com/@lars.willemsens/managing-asp-net-core-mvc-front-end-dependencies-with-npm-and-webpack-part-1-1f6a8b8a1289
+* https://medium.com/@lars.willemsens/managing-asp-net-core-mvc-front-end-dependencies-with-npm-and-webpack-part-2-330ccbe89e0a
 
 ## TODO
 
