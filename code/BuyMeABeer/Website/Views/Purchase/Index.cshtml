@@ -1,9 +1,17 @@
-﻿@{
+﻿@model BeerProduct
+@{
     ViewData["Title"] = "Buy me a beer";
 }
 <h1>@ViewData["Title"]</h1>
 
-<form asp-controller="Purchase" asp-action="PlaceOrder" method="post">
-    <p>Place an order by clicking on the button below</p>
-    <button class="btn btn-primary">Submit</button>
-</form>
+@if (Model == null)
+{
+    <p>Invalid beer id</p>
+}
+else
+{
+    <form asp-controller="Purchase" asp-action="PlaceOrder" method="post">
+        <p>You are buying "@Model.Description" for €@Model.Price.</p>
+        <button class="btn btn-primary">Buy!</button>
+    </form>
+}

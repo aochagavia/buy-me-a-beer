@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Website.Auth;
 using Website.Database;
+using Website.Services;
 
 namespace Website
 {
@@ -25,6 +26,10 @@ namespace Website
             services.AddControllersWithViews();
             services.AddDbContext<WebsiteDbContext>(options =>
                 options.UseSqlServer(Configuration["Data:DbContext:ConnectionString"]));
+
+            services
+                .AddScoped<CommentRepository>()
+                .AddScoped<BeerOrderService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

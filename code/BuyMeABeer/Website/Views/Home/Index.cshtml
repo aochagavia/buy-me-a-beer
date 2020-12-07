@@ -5,33 +5,28 @@
 
 <h3 class="my-3">Beer choice</h3>
 <div class="row">
-    <div class="col-sm-4">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Small beer</h5>
-                <p class="card-text">Price: €2.</p>
-                <a asp-controller="Purchase" asp-action="Index" class="btn btn-primary">Buy me this beer!</a>
+    @{
+        // Note: this layout assumes 3 beer products
+        foreach (var beerProduct in Model.BeerProducts)
+        {
+            <div class="col-sm-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@beerProduct.Description</h5>
+                        @if (beerProduct.Price == null)
+                        {
+                            <p class="card-text">You choose the price.</p>
+                        }
+                        else
+                        {
+                            <p class="card-text">Price: €@beerProduct.Price.</p>
+                        }
+                        <a asp-controller="Purchase" asp-action="Index" asp-route-id="@beerProduct.Id" class="btn btn-primary">Buy me this beer!</a>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="col-sm-4">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Medium beer</h5>
-                <p class="card-text">Price: €5.</p>
-                <a href="#" class="btn btn-primary">Buy me this beer!</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-4">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Large beer</h5>
-                <p class="card-text">Price: €10.</p>
-                <a href="#" class="btn btn-primary">Buy me this beer!</a>
-            </div>
-        </div>
-    </div>
+        }
+    }
 </div>
 
 <div>

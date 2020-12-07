@@ -1,33 +1,28 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Website.Database;
 using Website.Models;
+using Website.Services;
 
 namespace Website.Controllers
 {
-    // [Authorize] // TODO: remove this Authorize, since this was just for testing
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly WebsiteDbContext _db;
+        private readonly CommentRepository _commentRepository;
+        private readonly BeerOrderService _beerOrderService;
 
-        public HomeController(ILogger<HomeController> logger, WebsiteDbContext db)
+        public HomeController(CommentRepository commentRepository, BeerOrderService beerOrderService)
         {
-            _logger = logger;
-            _db = db;
+            _commentRepository = commentRepository;
+            _beerOrderService = beerOrderService;
         }
 
         public async Task<IActionResult> Index()
         {
-            // TODO: pass down the available beer offerings and their ids
-            // TODO: replace large beer by custom-sized beer
             return View(new IndexViewModel
             {
-                Comments = await _db.Comments.ToArrayAsync(),
+                BeerProducts = _beerOrderService.AvailableBeerProducts(),
+                Comments = await _commentRepository.LatestComments(),
             });
         }
 

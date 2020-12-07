@@ -57,11 +57,11 @@ TODO: explain how to set up Auth0 with dotnet secret
 
 ## Authentication
 
-Following this tutorial to set up Auth0: https://auth0.com/docs/quickstart/webapp/aspnet-core-3
+Followed this tutorial to set up Auth0: https://auth0.com/docs/quickstart/webapp/aspnet-core-3
 
 ## Client-side library management
 
-Following this tutorial to set up Webpack:
+Followed this tutorial to set up Webpack (with modifications because I wanted the most recent versions):
 * https://medium.com/@lars.willemsens/managing-asp-net-core-mvc-front-end-dependencies-with-npm-and-webpack-part-1-1f6a8b8a1289
 * https://medium.com/@lars.willemsens/managing-asp-net-core-mvc-front-end-dependencies-with-npm-and-webpack-part-2-330ccbe89e0a
 
@@ -69,11 +69,23 @@ Following this tutorial to set up Webpack:
 
 Must do:
 
-* Use policies in authentication for additional security (i.e. if someone manages to register they will still be missing a claim to do anything)
-* Cleanup the website backend (e.g. use EF Core and auth best practices)
-* Cleanup the website frontend (e.g. use MVC best practices, use npm for frontend dependencies)
-* Create the pages we actually want to have
-* Integrate with a payments provider
+* Finish the basic functionality around buying me a beer:
+    * Allow the user to supply the beer price for the "Custom beer" product
+    * Allow the user to supply a nickname and a comment for any product
+    * Actually trigger a payment through Stripe (or other provider)
+* Cleanup and sanity checks:
+    * Comments should be ordered by creation date in home
+    * We should make sure user input does not exceed a certain length
+    * We should make sure nicknames and comments cannot be used for XSS or similar attacks
+* Set up Auth0 properly from Pulumi:
+    * Signing in through Google should be disabled
+    * Registering should be disabled
+* Create a page to moderate comments (not necessary for Infi demo):
+    * List comments awaiting for moderation. Approve / reject with a click.
+    * List of approved comments, by approval date. Reject with a click.
+    * List of rejected comments, by rejection date. Approve with a click.
+    * Protect thse pages behind authorization with a policy that requires a special claim (that way you need more than just registering to access it)
+* Find and resolve remaining TODOs
 
 Could do:
 

@@ -5,7 +5,6 @@ namespace Website.Database
 {
     public class WebsiteDbContext : DbContext
     {
-        public DbSet<TestEntity> TestEntities { get; set; }
         public DbSet<Purchase> Purchases { get; set; }
         public DbSet<Comment> Comments { get; set; }
 
