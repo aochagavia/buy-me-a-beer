@@ -6,7 +6,7 @@ project.lock.json
 nupkg/
 
 # Client-side stuff
-wwwroot/dist/
+**/wwwroot/dist/
 
 # Visual Studio Code
 .vscode
