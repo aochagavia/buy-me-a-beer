@@ -29,7 +29,7 @@ namespace Website.Controllers
         public async Task<IActionResult> PlaceOrder()
         {
             // TODO: use real data from POST
-            await _beerOrderService.PlaceOrder(Guid.Empty, "DummyNickname", "The answer is 42");
+            await _beerOrderService.PlaceOrder(Guid.Empty, "DummyNickname", "The answer is 42", null);
             return View();
         }
     }

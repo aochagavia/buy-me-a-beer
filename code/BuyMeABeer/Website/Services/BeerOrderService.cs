@@ -11,6 +11,11 @@ namespace Website.Services
     {
         private readonly WebsiteDbContext _db;
 
+        public BeerOrderService(WebsiteDbContext db)
+        {
+            _db = db;
+        }
+
         public async Task PlaceOrder(Guid beerId, string nickName, string message, int? price)
         {
             // TODO: talk to stripe here

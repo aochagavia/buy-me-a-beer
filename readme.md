@@ -77,6 +77,7 @@ Must do:
     * Comments should be ordered by creation date in home
     * We should make sure user input does not exceed a certain length
     * We should make sure nicknames and comments cannot be used for XSS or similar attacks
+    * We should have a WebsiteTest project where we at least test our services
 * Set up Auth0 properly from Pulumi:
     * Signing in through Google should be disabled
     * Registering should be disabled
