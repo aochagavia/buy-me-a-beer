@@ -23,8 +23,17 @@ namespace Website.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var testEntityCount = await _db.TestEntities.CountAsync();
-            return View(new IndexViewModel { TestEntityCount = testEntityCount });
+            // TODO: pass down the available beer offerings and their ids
+            // TODO: replace large beer by custom-sized beer
+            return View(new IndexViewModel
+            {
+                Comments = await _db.Comments.ToArrayAsync(),
+            });
+        }
+
+        public IActionResult WhatIsThis()
+        {
+            return View();
         }
 
         public IActionResult Privacy()

@@ -13,8 +13,4 @@
       <PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="3.1.10" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Database\Entities\" />
-    </ItemGroup>
-
 </Project>

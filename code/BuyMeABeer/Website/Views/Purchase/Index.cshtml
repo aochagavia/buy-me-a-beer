@@ -1,0 +1,9 @@
+﻿@{
+    ViewData["Title"] = "Buy me a beer";
+}
+<h1>@ViewData["Title"]</h1>
+
+<form asp-controller="Purchase" asp-action="PlaceOrder" method="post">
+    <p>Place an order by clicking on the button below</p>
+    <button class="btn btn-primary">Submit</button>
+</form>
