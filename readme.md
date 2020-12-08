@@ -70,8 +70,6 @@ Followed this tutorial to set up Webpack (with modifications because I wanted th
 Must do:
 
 * Finish the basic functionality around buying me a beer:
-    * Allow the user to supply the beer price for the "Custom beer" product
-    * Allow the user to supply a nickname and a comment for any product
     * Actually trigger a payment through Stripe (or other provider)
 * Cleanup and sanity checks:
     * Comments should be ordered by creation date in home

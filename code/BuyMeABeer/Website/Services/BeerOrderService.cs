@@ -16,24 +16,42 @@ namespace Website.Services
             _db = db;
         }
 
-        public async Task PlaceOrder(Guid beerId, string nickName, string message, int? price)
+        public async Task PlaceOrder(Guid beerId, string nickname, string message, int? price)
         {
+            var beerProduct = GetBeerProduct(beerId);
+            if (beerProduct == null)
+            {
+                // TODO: maybe throw exception
+                return;
+            }
+
+            if (beerProduct.Price != null && price != null)
+            {
+                // TODO: maybe throw exception
+                return;
+            }
+
+
             // TODO: talk to stripe here
-            // TODO: only take user-supplier price into consideration if the beer product doesn't have its own price
-            // TODO: make sure the beerId matches a real beer id
 
             var purchase = new Purchase
             {
                 BeerId = beerId,
             };
-            var comment = new Comment
-            {
-                Purchase = purchase,
-                Nickname = nickName,
-                Message = message,
-            };
+            _db.Add(purchase);
 
-            _db.Add(comment);
+            if (!string.IsNullOrWhiteSpace(message))
+            {
+                var comment = new Comment
+                {
+                    Purchase = purchase,
+                    Nickname = string.IsNullOrWhiteSpace(nickname) ? null : nickname,
+                    Message = message,
+                };
+
+                _db.Add(comment);
+            }
+            
             await _db.SaveChangesAsync();
         }
 
