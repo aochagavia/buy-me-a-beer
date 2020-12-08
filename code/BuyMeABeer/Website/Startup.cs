@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Stripe;
 using Website.Auth;
 using Website.Database;
 using Website.Services;
@@ -26,10 +27,12 @@ namespace Website
             services.AddControllersWithViews();
             services.AddDbContext<WebsiteDbContext>(options =>
                 options.UseSqlServer(Configuration["Data:DbContext:ConnectionString"]));
+            StripeConfiguration.ApiKey = Configuration["Stripe:SecretKey"];
 
             services
                 .AddScoped<CommentRepository>()
-                .AddScoped<BeerOrderService>();
+                .AddScoped<BeerOrderService>()
+                .AddScoped<PaymentService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

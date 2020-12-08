@@ -5,7 +5,7 @@ namespace Website.Database
 {
     public class WebsiteDbContext : DbContext
     {
-        public DbSet<Purchase> Purchases { get; set; }
+        public DbSet<Payment> Payments { get; set; }
         public DbSet<Comment> Comments { get; set; }
 
         public WebsiteDbContext(DbContextOptions options) : base(options)

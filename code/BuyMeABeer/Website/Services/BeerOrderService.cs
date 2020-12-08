@@ -10,50 +10,46 @@ namespace Website.Services
     public class BeerOrderService
     {
         private readonly WebsiteDbContext _db;
+        private readonly PaymentService _paymentService;
 
-        public BeerOrderService(WebsiteDbContext db)
+        public BeerOrderService(WebsiteDbContext db, PaymentService paymentService)
         {
             _db = db;
+            _paymentService = paymentService;
         }
 
-        public async Task PlaceOrder(Guid beerId, string nickname, string message, int? price)
+        public async Task<Payment> PlaceOrder(Guid beerId, int? price) // string nickname, string message
         {
             var beerProduct = GetBeerProduct(beerId);
             if (beerProduct == null)
             {
-                // TODO: maybe throw exception
-                return;
+                // TODO: maybe make this user-friendly
+                throw new Exception("Beer product not found");
             }
 
             if (beerProduct.Price != null && price != null)
             {
-                // TODO: maybe throw exception
-                return;
+                // TODO: maybe make this user-friendly
+                throw new Exception("Beer product doesn't accept a custom price");
             }
 
+            var payment = await _paymentService.CreatePayment(beerProduct, price);
 
-            // TODO: talk to stripe here
+            //if (!string.IsNullOrWhiteSpace(message))
+            //{
+            //    var comment = new Comment
+            //    {
+            //        Payment = payment,
+            //        Nickname = string.IsNullOrWhiteSpace(nickname) ? null : nickname,
+            //        Message = message,
+            //        CreatedUtc = DateTimeOffset.UtcNow,
+            //    };
 
-            var purchase = new Purchase
-            {
-                BeerId = beerId,
-            };
-            _db.Add(purchase);
-
-            if (!string.IsNullOrWhiteSpace(message))
-            {
-                var comment = new Comment
-                {
-                    Purchase = purchase,
-                    Nickname = string.IsNullOrWhiteSpace(nickname) ? null : nickname,
-                    Message = message,
-                    CreatedUtc = DateTimeOffset.UtcNow,
-                };
-
-                _db.Add(comment);
-            }
+            //    _db.Add(comment);
+            //}
             
             await _db.SaveChangesAsync();
+            return payment;
         }
 
         public BeerProduct[] AvailableBeerProducts()

@@ -25,9 +25,13 @@ namespace Website.Controllers
             });
         }
 
-        // TODO: the controller will return an empty http response if a GET is issued... Can we do something more user-friendly?
+        public IActionResult PaymentSuccess(string sessionId)
+        {
+            return View();
+        }
+
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> PlaceOrder(PurchaseFormModel model)
+        public IActionResult PostComment()
         {
             if (!ModelState.IsValid)
             {
@@ -35,8 +39,33 @@ namespace Website.Controllers
                 return RedirectToAction(nameof(PurchaseController.Error));
             }
 
-            await _beerOrderService.PlaceOrder(model.Product.Id, model.Nickname, model.Message, model.Price);
             return View();
+        }
+
+        public IActionResult PaymentCancelled()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Checkout(IndexViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                // Invalid model should be prevented by the browser, so we don't need to be very user-friendly here
+                return RedirectToAction(nameof(PurchaseController.Error));
+            }
+
+            var formModel = model.PurchaseForm;
+            var beerProduct = _beerOrderService.GetBeerProduct(formModel.Product.Id);
+            var payment = await _beerOrderService.PlaceOrder(formModel.Product.Id, formModel.Price);
+
+            return View(new CheckoutModel
+            {
+                ProductDescription = beerProduct.Description,
+                ProductPrice = beerProduct.Price ?? formModel.Price ?? 0,
+                StripeSessionId = payment.StripeSessionId,
+            });
         }
 
         public IActionResult Error()

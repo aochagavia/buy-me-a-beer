@@ -70,8 +70,12 @@ Followed this tutorial to set up Webpack (with modifications because I wanted th
 Must do:
 
 * Finish the basic functionality around buying me a beer:
-    * Actually trigger a payment through Stripe (or other provider)
+    * Get Stripe keys from user secrets when running on localhost and from keyvault when on Azure
+    * Construct success and cancel redirect url in such a way that localhost / azure domain name are chosen
+    * Let the user enter the price of the beer right in the homepage (ensure no problems are caused when you enter price and choose small)
+    * Let the user leave a comment after successful payment
 * Cleanup and sanity checks:
+    * We should cache the comments so we survive HN's hug of death
     * We should have a WebsiteTest project where we at least test our services
 * Set up Auth0 properly from Pulumi:
     * Signing in through Google should be disabled

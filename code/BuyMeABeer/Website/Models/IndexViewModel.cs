@@ -6,5 +6,6 @@ namespace Website.Models
     {
         public Comment[] Comments { get; set; }
         public BeerProduct[] BeerProducts { get; set; }
+        public PurchaseFormModel PurchaseForm { get; set; }
     }
 }

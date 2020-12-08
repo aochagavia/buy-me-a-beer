@@ -1,0 +1,38 @@
+﻿@model CheckoutModel
+@{
+    ViewData["Title"] = "Buy me a beer";
+}
+<h1>@ViewData["Title"]</h1>
+
+@if (Model == null)
+{
+    <p>Invalid beer id</p>
+}
+else
+{
+    <p>You are buying me a "@Model.ProductDescription" for €@Model.ProductPrice.</p>
+
+    <p>After payment you may leave an optional message to enlighten future generations.</p>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <button class="btn btn-primary" id="checkout-btn">Proceed to Stripe checkout!</button>
+    <script type="text/javascript">
+        // TODO: get key from somewhere instead of hardcoding it
+        var stripe = Stripe("pk_test_51HueZpEHAUHyUhavfg42c714uIXOTsTjp37wIvkAHnBxH0ATj4YRY9LNRhewgzQp52xqXNUGflfQ7xuTWxHrYCGc00y5gnYroG");
+        
+        document
+            .getElementById("checkout-btn")
+            .addEventListener("click", function () {
+                stripe.redirectToCheckout({ sessionId: '@Model.StripeSessionId' })
+                    .then(function (result) {
+                        if (result.error) {
+                            alert(result.error.message);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.error("Error:", error);
+                    });
+            });
+    </script>
+}
