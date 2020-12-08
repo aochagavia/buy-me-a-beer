@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Stripe;
 using Website.Auth;
+using Website.Config;
 using Website.Database;
 using Website.Services;
 
@@ -27,6 +28,8 @@ namespace Website
             services.AddControllersWithViews();
             services.AddDbContext<WebsiteDbContext>(options =>
                 options.UseSqlServer(Configuration["Data:DbContext:ConnectionString"]));
+            services.AddOptions<StripeOptions>()
+                .Bind(Configuration.GetSection("Stripe"));
             StripeConfiguration.ApiKey = Configuration["Stripe:SecretKey"];
 
             services

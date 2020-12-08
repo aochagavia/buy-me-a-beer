@@ -18,9 +18,8 @@ else
     <script src="https://js.stripe.com/v3/"></script>
     <button class="btn btn-primary" id="checkout-btn">Proceed to Stripe checkout!</button>
     <script type="text/javascript">
-        // TODO: get key from somewhere instead of hardcoding it
-        var stripe = Stripe("pk_test_51HueZpEHAUHyUhavfg42c714uIXOTsTjp37wIvkAHnBxH0ATj4YRY9LNRhewgzQp52xqXNUGflfQ7xuTWxHrYCGc00y5gnYroG");
-        
+        var stripe = Stripe("@Model.StripePublicKey");
+
         document
             .getElementById("checkout-btn")
             .addEventListener("click", function () {

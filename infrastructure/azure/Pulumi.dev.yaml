@@ -7,3 +7,7 @@ config:
     secure: AAABABdcROmYVN0h2gJQ9jsEhNUuU0bzi91E63heBVaCCqkkUbJSfzjgvPmKLIyJ5w8xX/bLPw==
   azure:environment: public
   azure:location: WestEurope
+  stripe:privateKey:
+    secure: AAABAOLSUlo9R/ieUOgirgDP8tErLfuGksd7pRZwFXbquD7bspJQSYNNs/7+s8MS+rtOdiaW6ZS5BA86ccRgItpiB2ljLbZtuuyvkFL8jJjpg0C2emgUYy9vOPhBgHcZ3LEGTvCIzzSTXbNqSj9AnZ89hArRQpVbVB+aW0wCFa+xUB6teLhJTTOfww==
+  stripe:publicKey:
+    secure: AAABAHbMiZhENK92Nt8iguFV3yaIfoyUhmmMG01733nyUisfPPwgeeHLNc9WywCa1c2UQsdRcIfsYmUeV2gxloAgX+vyKCnEEXh9xgkqNlp9pWQvJ7It2HzNm2+3M1c3bB9E81kknCkPlCXS0TDDBiNxr/j3VQHOgyB3gsrGS3Tc0V4uzvarXraH3A==

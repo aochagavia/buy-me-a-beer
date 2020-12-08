@@ -81,6 +81,7 @@ export = async () => {
         appSettings: {
             'KeyVaultName': vault.name,
             'Auth0:Domain': new pulumi.Config('auth0').require('domain'),
+            'Stripe:PublicKey': new pulumi.Config('stripe').require('publicKey'),
         },
     });
 
@@ -136,5 +137,11 @@ export = async () => {
         keyVaultId: vault.id,
         value: auth0Client.clientSecret,
         name: 'Auth0--ClientSecret',
+    });
+
+    const stripeSecretKey = new azure.keyvault.Secret('Stripe--SecretKey', {
+        keyVaultId: vault.id,
+        value: new pulumi.Config('stripe').require('secretKey'),
+        name: 'Stripe--SecretKey',
     });
 }

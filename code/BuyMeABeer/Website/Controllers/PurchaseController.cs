@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
+using Website.Config;
 using Website.Models;
 using Website.Services;
 
@@ -9,10 +11,12 @@ namespace Website.Controllers
     public class PurchaseController : Controller
     {
         private readonly BeerOrderService _beerOrderService;
+        private readonly IOptions<StripeOptions> _stripeOptions;
 
-        public PurchaseController(BeerOrderService beerOrderService)
+        public PurchaseController(BeerOrderService beerOrderService, IOptions<StripeOptions> stripeOptions)
         {
             _beerOrderService = beerOrderService;
+            _stripeOptions = stripeOptions;
         }
 
         [Route("{id}")]
@@ -65,6 +69,7 @@ namespace Website.Controllers
                 ProductDescription = beerProduct.Description,
                 ProductPrice = beerProduct.Price ?? formModel.Price ?? 0,
                 StripeSessionId = payment.StripeSessionId,
+                StripePublicKey = _stripeOptions.Value.PublicKey,
             });
         }
 
