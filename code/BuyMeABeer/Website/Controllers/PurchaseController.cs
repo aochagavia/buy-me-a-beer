@@ -29,7 +29,18 @@ namespace Website.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> PlaceOrder(PurchaseFormModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                // Invalid model should be prevented by the browser, so we don't need to be very user-friendly here
+                return RedirectToAction(nameof(PurchaseController.Error));
+            }
+
             await _beerOrderService.PlaceOrder(model.Product.Id, model.Nickname, model.Message, model.Price);
+            return View();
+        }
+
+        public IActionResult Error()
+        {
             return View();
         }
     }

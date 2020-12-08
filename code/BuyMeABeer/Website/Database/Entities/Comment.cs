@@ -10,6 +10,6 @@ namespace Website.Database.Entities
         public string Nickname { get; set; } // TODO: make sure the length is within certain limits
         public string Message { get; set; } // TODO: make sure the length is within certain limits
         public bool Approved { get; set; }
-
+        public DateTimeOffset CreatedUtc { get; set; }
     }
 }

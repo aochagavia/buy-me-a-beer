@@ -30,14 +30,14 @@
 </div>
 
 <div>
-    @*TODO: make sure we prevent XSS*@
     <h3 class="my-3">People who bought me a beer left the following messages</h3>
     @{
         foreach (var comment in Model.Comments)
         {
             <div class="card mb-2">
                 <div class="card-body">
-                    <h5 class="card-title">@comment.Nickname</h5>
+                    <h5 class="card-title">@(comment.Nickname ?? "Anonymous")</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@comment.CreatedUtc</h6>
                     <p class="card-text">@comment.Message</p>
                 </div>
             </div>

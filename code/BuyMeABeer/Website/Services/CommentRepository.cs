@@ -18,7 +18,7 @@ namespace Website.Services
         public Task<Comment[]> LatestComments()
         {
             return _db.Comments
-                .OrderBy(c => c.Nickname) // TODO: order by CreatedUtc
+                .OrderByDescending(c => c.CreatedUtc)
                 .ToArrayAsync();
         }
     }

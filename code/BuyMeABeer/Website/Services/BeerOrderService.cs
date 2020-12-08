@@ -47,6 +47,7 @@ namespace Website.Services
                     Purchase = purchase,
                     Nickname = string.IsNullOrWhiteSpace(nickname) ? null : nickname,
                     Message = message,
+                    CreatedUtc = DateTimeOffset.UtcNow,
                 };
 
                 _db.Add(comment);
