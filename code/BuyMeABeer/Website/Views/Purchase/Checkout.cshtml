@@ -1,37 +1,24 @@
-﻿@model CheckoutModel
+﻿@model Website.Models.Form.CheckoutFormModel
 @{
     ViewData["Title"] = "Buy me a beer";
 }
 <h1>@ViewData["Title"]</h1>
 
-@if (Model == null)
-{
-    <p>Invalid beer id</p>
-}
-else
-{
-    <p>You are buying me a "@Model.ProductDescription" for €@Model.ProductPrice.</p>
+<form asp-controller="Purchase" asp-action="RedirectToStripe">
+    @if (@Model.ProductPrice == null)
+    {
+        <p>You are buying "@Model.ProductDescription" for a custom price.</p>
+        <label asp-for="ProductPrice"></label>
+        <input class="form-control mb-2" asp-for="ProductPrice" placeholder="Price in €" />
+    }
+    else
+    {
+        <p>You are buying "@Model.ProductDescription" for €@Model.ProductPrice.</p>
+        <input asp-for="ProductPrice" type="hidden" value="@Model.ProductPrice" />
+    }
 
     <p>After payment you may leave an optional message to enlighten future generations.</p>
 
-    <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
-    <script src="https://js.stripe.com/v3/"></script>
-    <button class="btn btn-primary" id="checkout-btn">Proceed to Stripe checkout!</button>
-    <script type="text/javascript">
-        var stripe = Stripe("@Model.StripePublicKey");
-
-        document
-            .getElementById("checkout-btn")
-            .addEventListener("click", function () {
-                stripe.redirectToCheckout({ sessionId: '@Model.StripeSessionId' })
-                    .then(function (result) {
-                        if (result.error) {
-                            alert(result.error.message);
-                        }
-                    })
-                    .catch(function (error) {
-                        console.error("Error:", error);
-                    });
-            });
-    </script>
-}
+    <input asp-for="ProductId" type="hidden" value="@Model.ProductId" />
+    <button class="btn btn-primary">Proceed to Stripe checkout!</button>
+</form>

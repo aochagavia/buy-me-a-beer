@@ -70,9 +70,10 @@ Followed this tutorial to set up Webpack (with modifications because I wanted th
 Must do:
 
 * Finish the basic functionality around buying me a beer:
+    * Fix client-side validation when posting a comment
+    * Fix client-side validation when posting an order with a custom price
+* Make stripe integration environment-specific:
     * Construct success and cancel redirect url in such a way that localhost / azure domain name are chosen
-    * Let the user enter the price of the beer right in the homepage (ensure no problems are caused when you enter price and choose small)
-    * Let the user leave a comment after successful payment
 * Cleanup and sanity checks:
     * We should cache the comments so we survive HN's hug of death
     * We should have a WebsiteTest project where we at least test our services
@@ -86,7 +87,7 @@ Must do:
     * Protect thse pages behind authorization with a policy that requires a special claim (that way you need more than just registering to access it)
 * Find and resolve remaining TODOs
 
-Could do:
+Could do (but won't, at the moment):
 
 * Start using `azure-nextgen` Pulumi resource provider instead of `azure` (needs https://github.com/pulumi/pulumi-azure-nextgen/issues/54 to be solved)
-* Figure out how to enable "managed identities for azure resources" so our app service can talk to the database without having credentials in the connection string
+* Figure out how to enable "managed identities for azure resources" so our app service can talk to the database without having credentials in the connection string (my initial attempt based on examples from the internet failed so right now we are storing the connection string in the key vault)

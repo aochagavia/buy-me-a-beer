@@ -1,12 +1,24 @@
-﻿@{
+﻿@model Website.Models.Form.CommentFormModel
+@{
     ViewData["Title"] = "Payment success";
 }
 <h1>@ViewData["Title"]</h1>
 
-@*<label asp-for="Nickname"></label>
-    <input class="form-control mb-2" asp-for="Nickname" placeholder="Nickname" />
+@if (Model.AlreadyCommented)
+{
+    <p>Thanks for buying me a beer! It looks like you already posted a comment. Go to the homepage to see it :)</p>
+}
+else
+{
+    <p>Thanks for buying me a beer! Now take your chance to enlighten te world with a nice comment :)</p>
+    <form asp-controller="Purchase" asp-action="PostComment">
+        <label asp-for="Nickname"></label>
+        <input class="form-control mb-2" asp-for="Nickname" placeholder="Nickname" />
 
-    <label asp-for="Message"></label>
-    <input class="form-control mb-4" asp-for="Message" placeholder="Message" />*@
+        <label asp-for="Message"></label>
+        <input class="form-control mb-4" asp-for="Message" placeholder="Message" />
 
-<p>Now you can post a comment from here :)</p>
+        <input asp-for="PaymentId" type="hidden" value="@Model.PaymentId" />
+        <button class="btn btn-primary">Submit</button>
+    </form>
+}

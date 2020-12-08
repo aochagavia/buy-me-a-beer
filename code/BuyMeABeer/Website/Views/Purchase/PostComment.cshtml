@@ -1,0 +1,14 @@
+﻿@model CommentPostSuccessModel
+@{
+    ViewData["Title"] = "Comment submitted";
+}
+<h1>@ViewData["Title"]</h1>
+
+@if (Model.Comment == null)
+{
+    <p>It looks like your comment was empty, so nothing to show here...</p>
+}
+else
+{
+    <p>Thanks for your wisdom. Now go to the homepage to see your comment in all its glory.</p>
+}

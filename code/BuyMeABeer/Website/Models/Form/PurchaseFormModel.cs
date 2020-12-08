@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Website.Models
+﻿namespace Website.Models.Form
 {
     public class PurchaseFormModel
     {

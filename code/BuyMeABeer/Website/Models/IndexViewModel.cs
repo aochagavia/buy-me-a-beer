@@ -1,4 +1,5 @@
-﻿using Website.Database.Entities;
+﻿using System;
+using Website.Database.Entities;
 
 namespace Website.Models
 {
@@ -6,6 +7,6 @@ namespace Website.Models
     {
         public Comment[] Comments { get; set; }
         public BeerProduct[] BeerProducts { get; set; }
-        public PurchaseFormModel PurchaseForm { get; set; }
+        public Guid BeerProductId { get; set; }
     }
 }

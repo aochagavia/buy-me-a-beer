@@ -10,11 +10,11 @@ namespace Website.Services
 {
     public class PaymentService
     {
-        private readonly WebsiteDbContext _db;
+        private readonly PaymentRepository _paymentRepository;
 
-        public PaymentService(WebsiteDbContext db)
+        public PaymentService(PaymentRepository paymentRepository)
         {
-            _db = db;
+            _paymentRepository = paymentRepository;
         }
 
         public async Task<Payment> CreatePayment(BeerProduct beerProduct, int? customPrice)
@@ -29,7 +29,7 @@ namespace Website.Services
 
             var options = new SessionCreateOptions
             {
-                SuccessUrl = "http://localhost:3000/Purchase/PaymentSuccess/{CHECKOUT_SESSION_ID}",
+                SuccessUrl = "http://localhost:3000/Purchase/PaymentSuccess?sessionId={CHECKOUT_SESSION_ID}",
                 CancelUrl = "http://localhost:3000/Purchase/PaymentCancelled",
                 PaymentMethodTypes = new List<string>
                 {
@@ -43,7 +43,7 @@ namespace Website.Services
                     new SessionLineItemOptions
                     {
                         Name = beerProduct.Description,
-                        Amount = (beerProduct.Price ?? customPrice) * 100, // TODO: use a real id
+                        Amount = (beerProduct.Price ?? customPrice) * 100,
                         Currency = "EUR",
                         Quantity = 1,
                     }
@@ -54,14 +54,7 @@ namespace Website.Services
             var service = new SessionService();
             var session = await service.CreateAsync(options);
 
-            var payment = new Payment
-            {
-                BeerId = beerProduct.Id,
-                StripeSessionId = session.Id,
-            };
-            _db.Add(payment);
-
-            return payment;
+            return await _paymentRepository.Create(beerProduct.Id, session.Id);
         }
     }
 }

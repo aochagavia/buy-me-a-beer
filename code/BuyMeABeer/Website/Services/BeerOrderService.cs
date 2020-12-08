@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Website.Database;
 using Website.Database.Entities;
 using Website.Models;
 
@@ -9,46 +8,29 @@ namespace Website.Services
 {
     public class BeerOrderService
     {
-        private readonly WebsiteDbContext _db;
         private readonly PaymentService _paymentService;
 
-        public BeerOrderService(WebsiteDbContext db, PaymentService paymentService)
+        public BeerOrderService(PaymentService paymentService)
         {
-            _db = db;
             _paymentService = paymentService;
         }
 
-        public async Task<Payment> PlaceOrder(Guid beerId, int? price) // string nickname, string message
+        public async Task<Payment> PlaceOrder(BeerProduct beerProduct, int? price)
         {
-            var beerProduct = GetBeerProduct(beerId);
             if (beerProduct == null)
             {
                 // TODO: maybe make this user-friendly
                 throw new Exception("Beer product not found");
             }
 
-            if (beerProduct.Price != null && price != null)
+            if (beerProduct.Price != null && price != null && beerProduct.Price != price)
             {
                 // TODO: maybe make this user-friendly
-                throw new Exception("Beer product doesn't accept a custom price");
+                throw new Exception("Form price doesn't match beer price");
             }
 
             var payment = await _paymentService.CreatePayment(beerProduct, price);
-
-            //if (!string.IsNullOrWhiteSpace(message))
-            //{
-            //    var comment = new Comment
-            //    {
-            //        Payment = payment,
-            //        Nickname = string.IsNullOrWhiteSpace(nickname) ? null : nickname,
-            //        Message = message,
-            //        CreatedUtc = DateTimeOffset.UtcNow,
-            //    };
-
-            //    _db.Add(comment);
-            //}
             
-            await _db.SaveChangesAsync();
             return payment;
         }
 

@@ -34,6 +34,8 @@ namespace Website
 
             services
                 .AddScoped<CommentRepository>()
+                .AddScoped<PaymentRepository>()
+                .AddScoped<CommentCreationService>()
                 .AddScoped<BeerOrderService>()
                 .AddScoped<PaymentService>();
         }

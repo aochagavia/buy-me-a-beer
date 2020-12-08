@@ -16,23 +16,13 @@
                         @if (beerProduct.Price == null)
                         {
                             <p class="card-text">You choose the price.</p>
-                            @*@if (@Model.Product.Price == null)
-                            {
-                                <p>You are buying "@Model.Product.Description" for a custom price.</p>
-                                <label asp-for="Price"></label>
-                                <input class="form-control mb-2" asp-for="Price" placeholder="Price in €" />
-                            }
-                            else
-                            {
-                                <p>You are buying "@Model.Product.Description" for €@Model.Product.Price.</p>
-                            }*@
                         }
                         else
                         {
                             <p class="card-text">Price: €@beerProduct.Price.</p>
                         }
-                        <form asp-controller="Purchase" asp-action="Checkout" asp-route-id="@beerProduct.Id">
-                            <input asp-for="PurchaseForm.Product.Id" value="@beerProduct.Id" type="hidden" />
+                        <form asp-controller="Purchase" asp-action="Checkout">
+                            <input asp-for="BeerProductId" value="@beerProduct.Id" type="hidden" />
                             <button class="btn btn-primary">Buy me this beer!</button>
                         </form>
                     </div>
