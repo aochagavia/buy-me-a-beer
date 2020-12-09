@@ -9,6 +9,7 @@ namespace Website.Database.Entities
         public Guid BeerId { get; set; }
         [Required]
         public string StripeSessionId { get; set; }
+        public int Amount { get; set; }
         public Comment Comment { get; set; }
     }
 }

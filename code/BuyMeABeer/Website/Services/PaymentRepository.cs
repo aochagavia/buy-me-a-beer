@@ -15,12 +15,13 @@ namespace Website.Services
             _db = db;
         }
 
-        public async Task<Payment> Create(Guid beerId, string stripeSessionId)
+        public async Task<Payment> Create(Guid beerId, string stripeSessionId, int customPrice)
         {
             var payment = new Payment
             {
                 BeerId = beerId,
                 StripeSessionId = stripeSessionId,
+                Amount = customPrice,
             };
 
             _db.Add(payment);

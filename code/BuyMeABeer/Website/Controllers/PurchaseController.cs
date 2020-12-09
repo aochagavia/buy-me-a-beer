@@ -12,26 +12,23 @@ namespace Website.Controllers
     {
         private readonly BeerOrderService _beerOrderService;
         private readonly CommentCreationService _commentCreationService;
-        private readonly CommentRepository _commentRepository;
         private readonly PaymentRepository _paymentRepository;
         private readonly IOptions<StripeOptions> _stripeOptions;
 
         public PurchaseController(
             BeerOrderService beerOrderService,
             CommentCreationService commentCreationService,
-            CommentRepository commentRepository,
             PaymentRepository paymentRepository,
             IOptions<StripeOptions> stripeOptions)
         {
             _beerOrderService = beerOrderService;
             _commentCreationService = commentCreationService;
-            _commentRepository = commentRepository;
             _paymentRepository = paymentRepository;
             _stripeOptions = stripeOptions;
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Checkout(IndexViewModel model)
+        public IActionResult Checkout(HomeFormModel model)
         {
             if (!ModelState.IsValid)
             {

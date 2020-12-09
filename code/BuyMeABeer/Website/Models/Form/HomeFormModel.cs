@@ -1,9 +1,9 @@
 ﻿using System;
 using Website.Database.Entities;
 
-namespace Website.Models
+namespace Website.Models.Form
 {
-    public class IndexViewModel
+    public class HomeFormModel
     {
         public Comment[] Comments { get; set; }
         public BeerProduct[] BeerProducts { get; set; }

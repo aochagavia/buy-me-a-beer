@@ -72,9 +72,12 @@ Must do:
 * Finish the basic functionality around buying me a beer:
     * Fix client-side validation when posting a comment
     * Fix client-side validation when posting an order with a custom price
-* Make stripe integration environment-specific:
+    * Use other beer prices and names (e.g. normal beer 2.40, abbey beer 5.20)
+* Polish stripe integration:
+    * Figure out which payment providers to accept (can we do all?)
     * Construct success and cancel redirect url in such a way that localhost / azure domain name are chosen
 * Cleanup and sanity checks:
+    * Figure out how to stop using the master database and use a custom one instead
     * We should cache the comments so we survive HN's hug of death
     * We should have a WebsiteTest project where we at least test our services
 * Set up Auth0 properly from Pulumi:

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Website.Models;
+using Website.Models.Form;
 using Website.Services;
 
 namespace Website.Controllers
@@ -19,7 +20,7 @@ namespace Website.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(new IndexViewModel
+            return View(new HomeFormModel
             {
                 BeerProducts = _beerOrderService.AvailableBeerProducts(),
                 Comments = await _commentRepository.LatestComments(),

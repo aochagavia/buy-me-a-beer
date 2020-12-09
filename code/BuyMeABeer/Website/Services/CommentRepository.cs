@@ -49,6 +49,7 @@ namespace Website.Services
         public Task<Comment[]> LatestComments()
         {
             return _db.Comments
+                .Include(c => c.Payment)
                 .OrderByDescending(c => c.CreatedUtc)
                 .ToArrayAsync();
         }

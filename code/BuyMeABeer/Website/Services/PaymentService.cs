@@ -1,8 +1,6 @@
-﻿using Stripe;
-using Stripe.Checkout;
+﻿using Stripe.Checkout;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Website.Database;
 using Website.Database.Entities;
 using Website.Models;
 
@@ -24,8 +22,8 @@ namespace Website.Services
             //{
 
             //});
-            
-            // Check that the prices are available, or create them...
+
+            var price = (beerProduct.Price ?? customPrice).Value * 100;
 
             var options = new SessionCreateOptions
             {
@@ -43,7 +41,7 @@ namespace Website.Services
                     new SessionLineItemOptions
                     {
                         Name = beerProduct.Description,
-                        Amount = (beerProduct.Price ?? customPrice) * 100,
+                        Amount = price,
                         Currency = "EUR",
                         Quantity = 1,
                     }
@@ -54,7 +52,7 @@ namespace Website.Services
             var service = new SessionService();
             var session = await service.CreateAsync(options);
 
-            return await _paymentRepository.Create(beerProduct.Id, session.Id);
+            return await _paymentRepository.Create(beerProduct.Id, session.Id, price);
         }
     }
 }

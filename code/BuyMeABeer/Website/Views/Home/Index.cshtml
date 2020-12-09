@@ -1,4 +1,4 @@
-﻿@model IndexViewModel
+﻿@model Website.Models.Form.HomeFormModel
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -40,7 +40,7 @@
             <div class="card mb-2">
                 <div class="card-body">
                     <h5 class="card-title">@(comment.Nickname ?? "Anonymous")</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">@comment.CreatedUtc</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">@comment.CreatedUtc (€@(comment.Payment.Amount / 100).@(comment.Payment.Amount % 100))</h6>
                     <p class="card-text">@comment.Message</p>
                 </div>
             </div>
