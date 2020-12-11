@@ -19,5 +19,5 @@ Configure Pulumi to use your Stripe keys:
 
 ```
 pulumi config set stripe:publicKey <your-public-key>
-pulumi config set stripe:privateKey <your-secret-key> --secret
+pulumi config set stripe:secretKey <your-secret-key> --secret
 ```

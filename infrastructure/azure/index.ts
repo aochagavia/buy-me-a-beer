@@ -3,19 +3,28 @@ import * as random from "@pulumi/random";
 import * as azure from "@pulumi/azure";
 import * as auth0 from "@pulumi/auth0";
 
-const prefix = "buy-me-a-beer";
+const prefix = 'buy-me-a-beer';
+function makeResourceName(name: string): string {
+    return `${prefix}-${name}`;
+}
 
 export = async () => {
-    const resourceGroup = new azure.core.ResourceGroup(`${prefix}-rg`);
+    const azureConfig = new pulumi.Config('azure');
+    const location = azureConfig.require('location');
 
-    const appInsights = new azure.appinsights.Insights(`${prefix}-ai`, {
-        resourceGroupName: resourceGroup.name,
+    const rgName = makeResourceName('rg');
+    const rg = new azure.core.ResourceGroup(rgName);
+
+    const aiName = makeResourceName('ai');
+    const ai = new azure.appinsights.Insights(aiName, {
+        resourceGroupName: rg.name,
         applicationType: 'web',
     });
 
     const clientConfig = await azure.core.getClientConfig();
-    const vault = new azure.keyvault.KeyVault(`${prefix}-kv`, {
-        resourceGroupName: resourceGroup.name,
+    const kvName = makeResourceName('kv');
+    const vault = new azure.keyvault.KeyVault(kvName, {
+        resourceGroupName: rg.name,
         tenantId: clientConfig.tenantId,
         skuName: 'standard',
         softDeleteEnabled: true,
@@ -31,27 +40,29 @@ export = async () => {
 
     const aiSecret = new azure.keyvault.Secret('ApplicationInsights--InstrumentationKey', {
         keyVaultId: vault.id,
-        value: appInsights.instrumentationKey,
+        value: ai.instrumentationKey,
         name: 'ApplicationInsights--InstrumentationKey',
     });
 
     const administratorLoginUsername = new random.RandomPassword("sqlAdminUsername", { length: 32, special: true }).result;
     const administratorLoginPassword = new random.RandomPassword("sqlAdminPassword", { length: 32, special: true }).result;
-    const sqlServer = new azure.sql.SqlServer(`${prefix}-sql`, {
-        resourceGroupName: resourceGroup.name,
+    const sqlServerName = makeResourceName('sql');
+    const sqlServer = new azure.sql.SqlServer(sqlServerName, {
+        resourceGroupName: rg.name,
         administratorLogin: administratorLoginUsername,
         administratorLoginPassword: administratorLoginPassword,
         version: "12.0",
     });
 
-    const database = new azure.sql.Database(`${prefix}-db`, {
-        resourceGroupName: resourceGroup.name,
+    const dbName = makeResourceName('db');
+    const db = new azure.sql.Database(dbName, {
+        resourceGroupName: rg.name,
         serverName: sqlServer.name,
         requestedServiceObjectiveName: "S0",
     });
 
     const dbConnectionString = pulumi
-        .all([sqlServer.name, database.name, administratorLoginUsername, administratorLoginPassword])
+        .all([sqlServer.name, db.name, administratorLoginUsername, administratorLoginPassword])
         .apply(([server, db, username, password]) =>
             `Server=tcp:${server}.database.windows.net;Database=${db};User ID=${username};Password=${password};`);
 
@@ -61,18 +72,23 @@ export = async () => {
         name: 'Data--DbContext--ConnectionString',
     });
 
-    const appServicePlan = new azure.appservice.Plan(`${prefix}-plan`, {
-        resourceGroupName: resourceGroup.name,
+    const planName = makeResourceName('plan');
+    const planSize = azureConfig.require('appServicePlanSize');
+    const tier = azureConfig.require('appServiceTier');
+    const appServicePlan = new azure.appservice.Plan(planName, {
+        resourceGroupName: rg.name,
         sku: {
-            capacity: 1,
-            size: 'D1', // See https://azure.microsoft.com/en-us/pricing/details/app-service/windows/ for size names
-            tier: 'Shared',
-        }
+            size: planSize,
+            tier,
+        },
+        reserved: true,
+        kind: 'Linux',
     });
 
-    const appService = new azure.appservice.AppService(`${prefix}-app`, {
+    const appServiceName = makeResourceName('app');
+    const appService = new azure.appservice.AppService(appServiceName, {
         appServicePlanId: appServicePlan.id,
-        resourceGroupName: resourceGroup.name,
+        resourceGroupName: rg.name,
         httpsOnly: true,
         enabled: true,
         identity: {
@@ -80,30 +96,45 @@ export = async () => {
         },
         appSettings: {
             'KeyVaultName': vault.name,
-            'Auth0:Domain': new pulumi.Config('auth0').require('domain'),
-            'Stripe:PublicKey': new pulumi.Config('stripe').require('publicKey'),
+            'Auth0__Domain': new pulumi.Config('auth0').require('domain'),
+            'Stripe__PublicKey': new pulumi.Config('stripe').require('publicKey'),
         },
+        siteConfig: {
+            linuxFxVersion: 'DOTNET |5.0',
+            use32BitWorkerProcess: true,
+        }
     });
 
+    // TODO: find a way to put this in appsettings instead of abusing the key vault
+    new azure.keyvault.Secret('Deployment--BaseUrl', {
+        keyVaultId: vault.id,
+        value: appService.defaultSiteHostname.apply(name => `https://${name}`),
+        name: 'Deployment--BaseUrl',
+    });
+
+    // TODO: automatically configure custom domain name in AppService
+    // * Create a TXT record to validate
+    // * Create a CNAME record that points to the app service
+    // * Create an AppService Managed certificate (see https://docs.microsoft.com/en-us/azure/app-service/configure-ssl-certificate#create-a-free-certificate-preview for the manual version)
+    // * Add binding for the certificate
+
     // Work around a preview issue https://github.com/pulumi/pulumi-azure/issues/192
-    const principalId = appService.identity.apply(id => id.principalId || "11111111-1111-1111-1111-111111111111");
-    const appServicePolicy = new azure.keyvault.AccessPolicy(`${prefix}-access-policy`, {
+    const principalId = appService.identity.apply(id => id?.principalId || '11111111-1111-1111-1111-111111111111');
+    const appServicePolicy = new azure.keyvault.AccessPolicy(`app-access-policy`, {
         keyVaultId: vault.id,
         tenantId: clientConfig.tenantId,
         objectId: principalId,
         secretPermissions: ['get', 'list'],
     });
 
-    // Add SQL firewall exceptions
-    const firewallRules = appService.outboundIpAddresses.apply(
-        ips => ips.split(",").map(
-            ip => new azure.sql.FirewallRule(`FR${ip}`, {
-                resourceGroupName: resourceGroup.name,
-                startIpAddress: ip,
-                endIpAddress: ip,
-                serverName: sqlServer.name,
-            }),
-        ));
+    const firewallRuleName = 'Allow Azure services';
+    const firewallRule = new azure.sql.FirewallRule(firewallRuleName, {
+        name: firewallRuleName,
+        resourceGroupName: rg.name,
+        startIpAddress: '0.0.0.0',
+        endIpAddress: '0.0.0.0',
+        serverName: sqlServer.name,
+    });
 
     const auth0Client = new auth0.Client('BuyMeABeer', {
         name: 'BuyMeABeer',
