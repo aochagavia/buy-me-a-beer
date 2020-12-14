@@ -8,7 +8,7 @@ From a technical standpoint, this all involves being able to:
 
 * Process payments
 * Persist user messages
-* Logging in as admin to moderate user messages
+* Logging in as admin to view statistics
 
 Additionally, to keep mental sanity in the development process we must be able to:
 
