@@ -10,19 +10,19 @@ namespace Website.Controllers
     public class HomeController : Controller
     {
         private readonly CommentRepository _commentRepository;
-        private readonly BeerOrderService _beerOrderService;
+        private readonly BeerProductRepository _beerProductRepository;
 
-        public HomeController(CommentRepository commentRepository, BeerOrderService beerOrderService)
+        public HomeController(CommentRepository commentRepository, BeerProductRepository beerProductRepository)
         {
             _commentRepository = commentRepository;
-            _beerOrderService = beerOrderService;
+            _beerProductRepository = beerProductRepository;
         }
 
         public async Task<IActionResult> Index()
         {
             return View(new HomeFormModel
             {
-                BeerProducts = _beerOrderService.AvailableBeerProducts(),
+                BeerProducts = _beerProductRepository.AvailableBeerProducts(),
                 Comments = await _commentRepository.LatestComments(),
             });
         }

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
-using Website.Config;
 using Website.Models;
 using Website.Models.Form;
+using Website.Options;
 using Website.Services;
 
 namespace Website.Controllers
@@ -13,18 +13,21 @@ namespace Website.Controllers
         private readonly BeerOrderService _beerOrderService;
         private readonly CommentCreationService _commentCreationService;
         private readonly PaymentRepository _paymentRepository;
+        private readonly BeerProductRepository _beerProductRepository;
         private readonly IOptions<StripeOptions> _stripeOptions;
 
         public PurchaseController(
             BeerOrderService beerOrderService,
             CommentCreationService commentCreationService,
             PaymentRepository paymentRepository,
-            IOptions<StripeOptions> stripeOptions)
+            IOptions<StripeOptions> stripeOptions,
+            BeerProductRepository beerProductRepository)
         {
             _beerOrderService = beerOrderService;
             _commentCreationService = commentCreationService;
             _paymentRepository = paymentRepository;
             _stripeOptions = stripeOptions;
+            _beerProductRepository = beerProductRepository;
         }
 
         [HttpPost, ValidateAntiForgeryToken]
@@ -36,7 +39,7 @@ namespace Website.Controllers
                 return RedirectToAction(nameof(PurchaseController.Error));
             }
 
-            var beerProduct = _beerOrderService.GetBeerProduct(model.BeerProductId);
+            var beerProduct = _beerProductRepository.GetBeerProduct(model.BeerProductId);
             if (beerProduct == null)
             {
                 return RedirectToAction(nameof(PurchaseController.Error));
@@ -59,7 +62,7 @@ namespace Website.Controllers
                 return RedirectToAction(nameof(PurchaseController.Error));
             }
 
-            var beerProduct = _beerOrderService.GetBeerProduct(model.ProductId);
+            var beerProduct = _beerProductRepository.GetBeerProduct(model.ProductId);
             var payment = await _beerOrderService.PlaceOrder(beerProduct, beerProduct.Price ?? model.ProductPrice);
 
             return View(new RedirectToStripeModel

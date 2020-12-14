@@ -1,4 +1,4 @@
-﻿namespace Website.Config
+﻿namespace Website.Options
 {
     public class StripeOptions
     {

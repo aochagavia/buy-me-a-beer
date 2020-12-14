@@ -10,7 +10,7 @@ From a technical standpoint, this all involves being able to:
 * Persist user messages
 * Logging in as admin to moderate user messages
 
-Additionally, to keep mental sanity in the development process we should be able to:
+Additionally, to keep mental sanity in the development process we must be able to:
 
 * Easily deploy the application
 * Easily run the application locally
@@ -75,22 +75,21 @@ Must do:
     * Use other beer prices and names (e.g. normal beer 2.40, abbey beer 5.20)
 * Polish stripe integration:
     * Figure out which payment providers to accept (can we do all?)
-    * Construct success and cancel redirect url in such a way that localhost / azure domain name are chosen
 * Cleanup and sanity checks:
+    * Extract a BeerProductRepository out of the BeerOrderService
     * Figure out how to stop using the master database and use a custom one instead
+    * Consolidate migrations
     * We should cache the comments so we survive HN's hug of death
     * We should have a WebsiteTest project where we at least test our services
+    * Use a beer emoji as favicon
 * Set up Auth0 properly from Pulumi:
     * Signing in through Google should be disabled
     * Registering should be disabled
-* Create a page to moderate comments (not necessary for Infi demo):
-    * List comments awaiting for moderation. Approve / reject with a click.
-    * List of approved comments, by approval date. Reject with a click.
-    * List of rejected comments, by rejection date. Approve with a click.
-    * Protect thse pages behind authorization with a policy that requires a special claim (that way you need more than just registering to access it)
 * Find and resolve remaining TODOs
 
 Could do (but won't, at the moment):
 
-* Start using `azure-nextgen` Pulumi resource provider instead of `azure` (needs https://github.com/pulumi/pulumi-azure-nextgen/issues/54 to be solved)
+* Completely migrate to `azure-nextgen` Pulumi resource provider instead of `azure`
 * Figure out how to enable "managed identities for azure resources" so our app service can talk to the database without having credentials in the connection string (my initial attempt based on examples from the internet failed so right now we are storing the connection string in the key vault)
+* Currently it is technically possible to post a comment _without_ having paid, though you will need to read the source code to find out ;). We _could_ make sure this is impossible, but then that would be another TODO on the list and this project would never be released
+* Use role-based authorization instead of letting any user access the admin dashboard

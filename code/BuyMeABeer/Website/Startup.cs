@@ -6,8 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Stripe;
 using Website.Auth;
-using Website.Config;
 using Website.Database;
+using Website.Options;
 using Website.Services;
 
 namespace Website
@@ -30,11 +30,14 @@ namespace Website
                 options.UseSqlServer(Configuration["Data:DbContext:ConnectionString"]));
             services.AddOptions<StripeOptions>()
                 .Bind(Configuration.GetSection("Stripe"));
+            services.AddOptions<DeploymentOptions>()
+                .Bind(Configuration.GetSection("Deployment"));
             StripeConfiguration.ApiKey = Configuration["Stripe:SecretKey"];
 
             services
                 .AddScoped<CommentRepository>()
                 .AddScoped<PaymentRepository>()
+                .AddScoped<BeerProductRepository>()
                 .AddScoped<CommentCreationService>()
                 .AddScoped<BeerOrderService>()
                 .AddScoped<PaymentService>();
@@ -51,7 +54,6 @@ namespace Website
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
-                app.UseHttpsRedirection();
             }
 
             using (var scope = app.ApplicationServices.CreateScope())

@@ -43,5 +43,10 @@ namespace Website.Services
                 .Include(payment => payment.Comment)
                 .FirstOrDefaultAsync(p => p.StripeSessionId == sessionId);
         }
+
+        public Task<int> Count()
+        {
+            return _db.Payments.CountAsync();
+        }
     }
 }

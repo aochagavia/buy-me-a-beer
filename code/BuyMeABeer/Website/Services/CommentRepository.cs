@@ -53,5 +53,10 @@ namespace Website.Services
                 .OrderByDescending(c => c.CreatedUtc)
                 .ToArrayAsync();
         }
+
+        public Task<int> Count()
+        {
+            return _db.Comments.CountAsync();
+        }
     }
 }
