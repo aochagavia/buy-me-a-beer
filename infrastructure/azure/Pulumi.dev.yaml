@@ -1,13 +1,17 @@
 config:
+  stack:resourcePostfix: test
+  buymeabeer:domain: buymeabeer-test.ochagavia.nl
   auth0:clientId:
     secure: AAABAOqHW/jwKQu8r2A06QoYXe5eULZ8tVZRHyHgmc3YyUTFAE1EcPmRBihnl1cklUZmHzkYP/M5Qgmos98g2w==
   auth0:clientSecret:
     secure: AAABACExV/ALP1+APlrZmfaxb3SsnteTVgPUXxBbmUQGZm583cAMnypQ+VOMkI1E1i+lXp8gENcF/HkZo/KxZ5p+nAzv4h83hObzMcP0qZvKqqq+kAukkPrk7GqadroF
   auth0:domain:
     secure: AAABABdcROmYVN0h2gJQ9jsEhNUuU0bzi91E63heBVaCCqkkUbJSfzjgvPmKLIyJ5w8xX/bLPw==
+  azure:appServicePlanSize: B1 # See https://azure.microsoft.com/en-us/pricing/details/app-service/windows/ for size names
+  azure:appServiceTier: Basic
   azure:environment: public
   azure:location: WestEurope
-  stripe:privateKey:
-    secure: AAABAOLSUlo9R/ieUOgirgDP8tErLfuGksd7pRZwFXbquD7bspJQSYNNs/7+s8MS+rtOdiaW6ZS5BA86ccRgItpiB2ljLbZtuuyvkFL8jJjpg0C2emgUYy9vOPhBgHcZ3LEGTvCIzzSTXbNqSj9AnZ89hArRQpVbVB+aW0wCFa+xUB6teLhJTTOfww==
   stripe:publicKey:
     secure: AAABAHbMiZhENK92Nt8iguFV3yaIfoyUhmmMG01733nyUisfPPwgeeHLNc9WywCa1c2UQsdRcIfsYmUeV2gxloAgX+vyKCnEEXh9xgkqNlp9pWQvJ7It2HzNm2+3M1c3bB9E81kknCkPlCXS0TDDBiNxr/j3VQHOgyB3gsrGS3Tc0V4uzvarXraH3A==
+  stripe:secretKey:
+    secure: AAABAPLyoAzzlAJyAX64bDvfNqyw/OnBdbL039ulQIPObvEyavj7F1eGY+O9GvhtR2BeHx8KuhrZ1YxCawljaMD6kWwusmwa7luei+gK52hyz1fqkjuB/BOmsBkVp5FakmhXhz1cr3NlLWuC2nXEzN9gUqonitwDEqaRHBcXCAlimAfoup1P3kvK2w==

@@ -1,0 +1,16 @@
+config:
+  auth0:clientId:
+    secure: AAABALQwRiCk9Hb4I3/TK0pbhzhDj5aM5l+AvPR9eqL1b9l78CMD/63Au2ySmpRt74uJAuBkQc6fjHiBOfIQOg==
+  auth0:clientSecret:
+    secure: AAABAMlS/IqntCa5FTRYkT9GkNNi/jGYCq35dG5oWXd7k4EH68Kj2+whIm0ZYYM5RiKznFUMR2Yhircu/tfd9mRPMMkxRWFsZf5sNABgLQAH4W3UUip25DpoahEVEB+I
+  auth0:domain: aochagavia.eu.auth0.com
+  azure:environment: public
+  azure:location: WestEurope
+  azure:appServicePlanSize: B1 # See https://azure.microsoft.com/en-us/pricing/details/app-service/windows/ for size names
+  azure:appServiceTier: Basic
+  buymeabeer:domain: buymeabeer.ochagavia.nl
+  stack:resourcePostfix: prod
+  stripe:publicKey:
+    secure: AAABAAxfUZR2UKQ7xmg/9Cq0tG7K1KT4vNYlMV+r0/CMH13RDYVbbE/YTf3SDJ0EsAskgbKPsx6kb5AvSrlY2jkW6D4iZEpmDtxHAeI2p05aqDoNahvgYmitlly1X01r9m3gFiQ9XFW33LWKmioG9jI5rr2F9M6rLGyLyQ0tf/wHyVStK5uXkqBuJw==
+  stripe:secretKey:
+    secure: AAABAEKCO/CD4DjyZL+CHRSr+OJncdS/ElJ4hLnDh7rPH9pAoEEWjwQTwp2ukfVrkLEJyDZYDmTX3uGWeWWFizkOPm4o5VBNNfFPZF13lf4xIAw3Ts3iSeEoMNlBCuzbM/+ZNxKizihgM1CwmWI2H0ZCRyifc5rvO21LjrTRG1uCR2x5MPtD94frjg==

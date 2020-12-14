@@ -3,9 +3,10 @@ import * as random from "@pulumi/random";
 import * as azure from "@pulumi/azure";
 import * as auth0 from "@pulumi/auth0";
 
-const prefix = 'buy-me-a-beer';
+const postfix = new pulumi.Config('stack').require('resourcePostfix');
+const prefix = 'bmab';
 function makeResourceName(name: string): string {
-    return `${prefix}-${name}`;
+    return `${prefix}-${name}-${postfix}-`;
 }
 
 export = async () => {
@@ -44,7 +45,7 @@ export = async () => {
         name: 'ApplicationInsights--InstrumentationKey',
     });
 
-    const administratorLoginUsername = new random.RandomPassword("sqlAdminUsername", { length: 32, special: true }).result;
+    const administratorLoginUsername = new random.RandomPassword("sqlAdminUsername", { length: 32, special: false }).result;
     const administratorLoginPassword = new random.RandomPassword("sqlAdminPassword", { length: 32, special: true }).result;
     const sqlServerName = makeResourceName('sql');
     const sqlServer = new azure.sql.SqlServer(sqlServerName, {
@@ -53,7 +54,6 @@ export = async () => {
         administratorLoginPassword: administratorLoginPassword,
         version: "12.0",
     });
-
     const dbName = makeResourceName('db');
     const db = new azure.sql.Database(dbName, {
         resourceGroupName: rg.name,
@@ -102,6 +102,7 @@ export = async () => {
         siteConfig: {
             linuxFxVersion: 'DOTNET |5.0',
             use32BitWorkerProcess: true,
+            alwaysOn: true,
         }
     });
 
@@ -136,15 +137,20 @@ export = async () => {
         serverName: sqlServer.name,
     });
 
+    const buyMeABeerConfig = new pulumi.Config('buymeabeer');
+    const customDomain = buyMeABeerConfig.require('domain');
+    const auth0ClientName = makeResourceName('client');
     const auth0Client = new auth0.Client('BuyMeABeer', {
-        name: 'BuyMeABeer',
+        name: auth0ClientName.substring(0, auth0ClientName.length - 1),
         appType: 'regular_web',
         allowedLogoutUrls: [
             'http://localhost:3000',
+            `https://${customDomain}`,
             appService.defaultSiteHostname.apply(hostName => `https://${hostName}`),
         ],
         callbacks: [
             'http://localhost:3000/callback',
+            `https://${customDomain}/callback`,
             appService.defaultSiteHostname.apply(hostName => `https://${hostName}/callback`),
         ],
         jwtConfiguration: {
