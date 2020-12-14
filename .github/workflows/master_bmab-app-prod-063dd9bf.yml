@@ -29,7 +29,7 @@ jobs:
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'bmab-app-prod-063dd9bf'
+        app-name: 'bmab-app-test-d8811c05'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_6b537c0eb4884e10aecc577b6cefd956 }}
         package: ${{env.DOTNET_ROOT}}/myapp
