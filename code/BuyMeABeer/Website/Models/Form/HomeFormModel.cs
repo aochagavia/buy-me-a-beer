@@ -1,5 +1,5 @@
-﻿using System;
-using Website.Database.Entities;
+﻿using Domain.Entities;
+using System;
 
 namespace Website.Models.Form
 {

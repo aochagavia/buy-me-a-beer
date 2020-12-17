@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Domain.Repositories;
+using Domain.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 using Website.Models;
 using Website.Models.Form;
 using Website.Options;
-using Website.Services;
 
 namespace Website.Controllers
 {
@@ -12,16 +13,16 @@ namespace Website.Controllers
     {
         private readonly BeerOrderService _beerOrderService;
         private readonly CommentCreationService _commentCreationService;
-        private readonly PaymentRepository _paymentRepository;
-        private readonly BeerProductRepository _beerProductRepository;
+        private readonly IPaymentRepository _paymentRepository;
+        private readonly IBeerProductRepository _beerProductRepository;
         private readonly IOptions<StripeOptions> _stripeOptions;
 
         public PurchaseController(
             BeerOrderService beerOrderService,
             CommentCreationService commentCreationService,
-            PaymentRepository paymentRepository,
+            IPaymentRepository paymentRepository,
             IOptions<StripeOptions> stripeOptions,
-            BeerProductRepository beerProductRepository)
+            IBeerProductRepository beerProductRepository)
         {
             _beerOrderService = beerOrderService;
             _commentCreationService = commentCreationService;

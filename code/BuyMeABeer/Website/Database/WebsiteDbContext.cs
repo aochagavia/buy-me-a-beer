@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Website.Database.Entities;
+﻿using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Website.Database
 {

@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Domain.Entities;
+using System;
 using System.Threading.Tasks;
-using Website.Database.Entities;
-using Website.Models;
 
-namespace Website.Services
+namespace Domain.Services
 {
     public class BeerOrderService
     {

@@ -1,4 +1,6 @@
-﻿namespace Website.Models.Form
+﻿using Domain.Entities;
+
+namespace Website.Models.Form
 {
     public class PurchaseFormModel
     {

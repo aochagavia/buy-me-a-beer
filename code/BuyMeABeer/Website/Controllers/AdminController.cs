@@ -1,18 +1,18 @@
 ﻿using System.Threading.Tasks;
+using Domain.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Website.Models;
-using Website.Services;
 
 namespace Website.Controllers
 {
     [Authorize]
     public class AdminController : Controller
     {
-        private readonly CommentRepository _commentRepository;
-        private readonly PaymentRepository _paymentRepository;
+        private readonly ICommentRepository _commentRepository;
+        private readonly IPaymentRepository _paymentRepository;
 
-        public AdminController(CommentRepository commentRepository, PaymentRepository paymentRepository)
+        public AdminController(ICommentRepository commentRepository, IPaymentRepository paymentRepository)
         {
             _commentRepository = commentRepository;
             _paymentRepository = paymentRepository;

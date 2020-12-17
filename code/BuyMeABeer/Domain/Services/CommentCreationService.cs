@@ -1,15 +1,16 @@
-﻿using System;
+﻿using Domain.Entities;
+using Domain.Repositories;
+using System;
 using System.Threading.Tasks;
-using Website.Database.Entities;
 
-namespace Website.Services
+namespace Domain.Services
 {
     public class CommentCreationService
     {
-        private readonly PaymentRepository _paymentRepository;
-        private readonly CommentRepository _commentRepository;
+        private readonly IPaymentRepository _paymentRepository;
+        private readonly ICommentRepository _commentRepository;
 
-        public CommentCreationService(PaymentRepository paymentRepository, CommentRepository commentRepository)
+        public CommentCreationService(IPaymentRepository paymentRepository, ICommentRepository commentRepository)
         {
             this._paymentRepository = paymentRepository;
             this._commentRepository = commentRepository;

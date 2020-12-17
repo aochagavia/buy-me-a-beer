@@ -1,18 +1,18 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
+using Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Website.Models;
 using Website.Models.Form;
-using Website.Services;
 
 namespace Website.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly CommentRepository _commentRepository;
-        private readonly BeerProductRepository _beerProductRepository;
+        private readonly ICommentRepository _commentRepository;
+        private readonly IBeerProductRepository _beerProductRepository;
 
-        public HomeController(CommentRepository commentRepository, BeerProductRepository beerProductRepository)
+        public HomeController(ICommentRepository commentRepository, IBeerProductRepository beerProductRepository)
         {
             _commentRepository = commentRepository;
             _beerProductRepository = beerProductRepository;

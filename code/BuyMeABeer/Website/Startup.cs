@@ -1,3 +1,6 @@
+using Domain.Integration;
+using Domain.Repositories;
+using Domain.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -7,8 +10,9 @@ using Microsoft.Extensions.Hosting;
 using Stripe;
 using Website.Auth;
 using Website.Database;
+using Website.Integration;
 using Website.Options;
-using Website.Services;
+using Website.Repositories;
 
 namespace Website
 {
@@ -35,9 +39,10 @@ namespace Website
             StripeConfiguration.ApiKey = Configuration["Stripe:SecretKey"];
 
             services
-                .AddScoped<CommentRepository>()
-                .AddScoped<PaymentRepository>()
-                .AddScoped<BeerProductRepository>()
+                .AddScoped<ICommentRepository, CommentRepository>()
+                .AddScoped<IPaymentRepository, PaymentRepository>()
+                .AddScoped<IBeerProductRepository, BeerProductRepository>()
+                .AddScoped<IStripeSessionService, StripeSessionService>()
                 .AddScoped<CommentCreationService>()
                 .AddScoped<BeerOrderService>()
                 .AddScoped<PaymentService>();

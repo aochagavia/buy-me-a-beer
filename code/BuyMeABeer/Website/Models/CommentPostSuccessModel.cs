@@ -1,4 +1,4 @@
-﻿using Website.Database.Entities;
+﻿using Domain.Entities;
 
 namespace Website.Models
 {

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Domain.Entities;
+using Domain.Repositories;
+using System;
 using System.Linq;
-using Website.Models;
 
-namespace Website.Services
+namespace Website.Repositories
 {
-    public class BeerProductRepository
+    public class BeerProductRepository : IBeerProductRepository
     {
         public BeerProduct[] AvailableBeerProducts()
         {

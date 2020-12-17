@@ -1,13 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Domain.Entities;
+using Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Website.Database;
-using Website.Database.Entities;
 
-namespace Website.Services
+namespace Website.Repositories
 {
-    public class CommentRepository
+    public class CommentRepository : ICommentRepository
     {
         private readonly WebsiteDbContext _db;
 

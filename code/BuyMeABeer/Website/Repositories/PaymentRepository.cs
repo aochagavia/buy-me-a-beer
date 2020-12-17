@@ -1,12 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Domain.Entities;
+using Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 using Website.Database;
-using Website.Database.Entities;
 
-namespace Website.Services
+namespace Website.Repositories
 {
-    public class PaymentRepository
+    public class PaymentRepository : IPaymentRepository
     {
         private readonly WebsiteDbContext _db;
 

@@ -1,32 +1,26 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Domain.Integration;
+using Microsoft.Extensions.Options;
 using Stripe.Checkout;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Website.Database.Entities;
-using Website.Models;
 using Website.Options;
 
-namespace Website.Services
+namespace Website.Integration
 {
-    public class PaymentService
+    public class StripeSessionService : IStripeSessionService
     {
-        private readonly PaymentRepository _paymentRepository;
         private readonly IOptions<DeploymentOptions> _deploymentOptions;
 
-        public PaymentService(PaymentRepository paymentRepository, IOptions<DeploymentOptions> deploymentOptions)
+        public StripeSessionService(IOptions<DeploymentOptions> deploymentOptions)
         {
-            _paymentRepository = paymentRepository;
             _deploymentOptions = deploymentOptions;
         }
 
-        public async Task<Payment> CreatePayment(BeerProduct beerProduct, int? customPrice)
+        public async Task<string> CreateStripeSession(string itemDescription, int itemPrice)
         {
-            // TODO: use Controller + Action instead of hardcoding the url
-
-            var price = (beerProduct.Price ?? customPrice).Value * 100;
-
             var options = new SessionCreateOptions
             {
+                // TODO: use Controller + Action instead of hardcoding the url
                 SuccessUrl = $"{_deploymentOptions.Value.BaseUrl}/Purchase/PaymentSuccess?sessionId={{CHECKOUT_SESSION_ID}}",
                 CancelUrl = $"{_deploymentOptions.Value.BaseUrl}/Purchase/PaymentCancelled",
                 PaymentMethodTypes = new List<string>
@@ -40,8 +34,8 @@ namespace Website.Services
                 {
                     new SessionLineItemOptions
                     {
-                        Name = beerProduct.Description,
-                        Amount = price,
+                        Name = itemDescription,
+                        Amount = itemPrice,
                         Currency = "EUR",
                         Quantity = 1,
                     }
@@ -51,8 +45,7 @@ namespace Website.Services
 
             var service = new SessionService();
             var session = await service.CreateAsync(options);
-
-            return await _paymentRepository.Create(beerProduct.Id, session.Id, price);
+            return session.Id;
         }
     }
 }
